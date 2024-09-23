@@ -3,67 +3,65 @@ let counter = document.getElementById("counter");
 
 let numberOfCookies = 0;
 let cookieIncreseNumber = 1;
+let clickUpgradeCost = 10;
+let autoclickUpgradeCost = 50;
+let autoclickPurchaseCount = 0; // Sleduje počet zakoupení automatického klikání
+let maxAutoclickPurchases = 3; // Maximální počet zakoupení
+
 cookie.onclick = () => {
     numberOfCookies += cookieIncreseNumber;
     counter.innerHTML = numberOfCookies;
-}
-
-let wrapper = document.getElementById("wrapper");
-let addButton = document.getElementById("add");
-
-addButton.onclick = () => {
-    wrapper.innerHTML += "<p>Ahoj</p>";
-    wrapper.innerText += "<p>Ahoj</p>"; 
-}
-
-let box = document.getElementById("box");
-
-box.onclick = () => {
-    box.style.backgroundColor = "red";
-}
-
-let secondBox = document.getElementById("box2");
-
-secondBox.onclick = () => {
-    secondBox.innerHTML++ //++ inkrement - zvedá o 1
-}
-
-let thirdBox = document.getElementById("box3");
-let leftPos = 0;
-let toptPos = 0;
-thirdBox.onclick = () => {
-    leftPos++;
-    //toptPos = toptPos + 2
-    toptPos += 2;
-    thirdBox.style.left = leftPos + "px";
-    thirdBox.style.top = toptPos + "px";
+    updateButtons();
 }
 
 let clickUpgradeBtn = document.getElementById("clickUpgrade");
-let clickUpgradeCost = 10;
 
 clickUpgradeBtn.onclick = () => {
     if (numberOfCookies >= clickUpgradeCost) {
-        numberOfCookies -= clickUpgradeCost; //odečteme cenu upgradu od sušenek
-        clickUpgradeCost += 10; //zvětšení cenu upgradu
+        numberOfCookies -= clickUpgradeCost; // Odečteme cenu upgradu od sušenek
+        clickUpgradeCost += 10; // Zvýšení ceny upgradu
+        cookieIncreseNumber += cookieIncreseNumber; // Zvětšíme hodnotu za kliknutí
         counter.innerHTML = numberOfCookies;
-        cookieIncreseNumber++;
-        clickUpgradeBtn.innerHTML = "Click upgrade (Cost: "+ clickUpgradeCost +")"
+        clickUpgradeBtn.innerHTML = "Click upgrade (Cost: " + clickUpgradeCost + ")";
+        updateButtons();
     }
 }
 
 let autoclickUpgrade = document.getElementById("autoclickUpgrade");
-let autoclickUpgradeCost = 50;
 
-autoclickUpgrade.onclick = () =>  {
-    if(numberOfCookies >= autoclickUpgradeCost){
+autoclickUpgrade.onclick = () => {
+    if (numberOfCookies >= autoclickUpgradeCost && autoclickPurchaseCount < maxAutoclickPurchases) {
         numberOfCookies -= autoclickUpgradeCost;
-        autoclickUpgradeCost *= 2;
+        autoclickUpgradeCost *= 2; // Zvýšení ceny upgradu
         counter.innerHTML = numberOfCookies;
-        autoclickUpgrade.innerHTML = "Autoclick (Cena: "+ autoclickUpgradeCost +")";
+        autoclickPurchaseCount++; // Zvýšíme počet nákupů
+        autoclickUpgrade.innerHTML = "Autoclick (Cena: " + autoclickUpgradeCost + ")";
+
         setInterval(() => {
-            numberOfCookies++;
+            numberOfCookies += cookieIncreseNumber;
             counter.innerHTML = numberOfCookies;
+            updateButtons();
         }, 1000);
+
+        if (autoclickPurchaseCount === maxAutoclickPurchases) {
+            autoclickUpgrade.disabled = true; // Deaktivace po třetím zakoupení
+        }
+        updateButtons();
     }
 }
+
+// Funkce, která kontroluje a aktualizuje tlačítka podle počtu sušenek
+const updateButtons = () => {
+    clickUpgradeBtn.disabled = numberOfCookies < clickUpgradeCost;
+    
+    // Pokud ještě nebylo dosaženo maximálního počtu zakoupení, tlačítko je aktivní
+    if (autoclickPurchaseCount < maxAutoclickPurchases) {
+        autoclickUpgrade.disabled = numberOfCookies < autoclickUpgradeCost;
+    } else {
+        autoclickUpgrade.disabled = true; // Tlačítko je trvale deaktivováno po třetím zakoupení
+        autoclickUpgrade.innerHTML = "Toto již nelze koupit";
+    }
+}
+
+// Inicializujeme tlačítka na začátku
+updateButtons();
