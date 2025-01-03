@@ -40,7 +40,6 @@ resetBtn.onclick = () => {
     clearInterval(autoclickInterval);
     autoclickInterval = null;
 
-    // Aktualizace UI
     counter.innerHTML = numberOfCookies;
     clickUpgradeBtn.innerHTML = "Click upgrade (Cost: " + clickUpgradeCost + ")";
     autoclickUpgrade.innerHTML = "Autoclick (Cena: " + autoclickUpgradeCost + ")";
