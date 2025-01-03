@@ -5,13 +5,12 @@ let numberOfCookies = 0;
 let cookieIncreseNumber = 1;
 let clickUpgradeCost = 10;
 let autoclickUpgradeCost = 50;
-let autoclickPurchaseCount = 0; // Sleduje počet zakoupení automatického klikání
-let maxAutoclickPurchases = 3; // Maximální počet zakoupení
+let autoclickPurchaseCount = 0;
+let maxAutoclickPurchases = 3;
 
-let autoclickInterval = null; // Uložíme interval pro automatické klikání
-let gamePaused = true; // Proměnná sledující, zda je hra pozastavená
+let autoclickInterval = null;
+let gamePaused = true;
 
-// Tlačítka Start, Pause a Reset
 let startBtn = document.getElementById("startBtn");
 let pauseBtn = document.getElementById("pauseBtn");
 let resetBtn = document.getElementById("resetBtn");
@@ -19,7 +18,6 @@ let resetBtn = document.getElementById("resetBtn");
 startBtn.onclick = () => {
     gamePaused = false;
     updateButtons();
-    // Obnovíme automatické klikání, pokud uživatel nějaké zakoupil
     if (autoclickPurchaseCount > 0) {
         startAutoclick();
     }
@@ -27,20 +25,19 @@ startBtn.onclick = () => {
 
 pauseBtn.onclick = () => {
     gamePaused = true;
-    clearInterval(autoclickInterval); // Zastavíme automatické klikání
+    clearInterval(autoclickInterval);
     updateButtons();
 };
 
 resetBtn.onclick = () => {
-    // Resetování všech hodnot
     numberOfCookies = 0;
     cookieIncreseNumber = 1;
     clickUpgradeCost = 10;
     autoclickUpgradeCost = 50;
-    autoclickPurchaseCount = 0; // Reset počtu zakoupení
-    gamePaused = true; // Hra je pozastavena
+    autoclickPurchaseCount = 0;
+    gamePaused = true;
 
-    clearInterval(autoclickInterval); // Zastavení automatického klikání
+    clearInterval(autoclickInterval);
     autoclickInterval = null;
 
     // Aktualizace UI
@@ -48,11 +45,11 @@ resetBtn.onclick = () => {
     clickUpgradeBtn.innerHTML = "Click upgrade (Cost: " + clickUpgradeCost + ")";
     autoclickUpgrade.innerHTML = "Autoclick (Cena: " + autoclickUpgradeCost + ")";
     
-    updateButtons(); // Aktualizace tlačítek
+    updateButtons();
 };
 
 cookie.onclick = () => {
-    if (!gamePaused) { // Pouze pokud hra není pozastavena
+    if (!gamePaused) {
         numberOfCookies += cookieIncreseNumber;
         counter.innerHTML = numberOfCookies;
         updateButtons();
@@ -77,12 +74,11 @@ let autoclickUpgrade = document.getElementById("autoclickUpgrade");
 autoclickUpgrade.onclick = () => {
     if (!gamePaused && numberOfCookies >= autoclickUpgradeCost && autoclickPurchaseCount < maxAutoclickPurchases) {
         numberOfCookies -= autoclickUpgradeCost;
-        autoclickUpgradeCost *= 2; // Zvyšujeme cenu upgradu
+        autoclickUpgradeCost *= 2;
         counter.innerHTML = numberOfCookies;
         autoclickPurchaseCount++;
         autoclickUpgrade.innerHTML = "Autoclick (Cena: " + autoclickUpgradeCost + ")";
 
-        // Spustíme automatické klikání
         startAutoclick();
         updateButtons();
     }
@@ -109,10 +105,8 @@ const updateButtons = () => {
         autoclickUpgrade.innerHTML = "Toto již nelze zakoupit";
     }
 
-    // Povolení/zakázání tlačítek start, pause a reset podle stavu hry
     startBtn.disabled = !gamePaused;
     pauseBtn.disabled = gamePaused;
 }
 
-// Inicializujeme tlačítka na začátku
 updateButtons();
