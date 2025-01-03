@@ -61,7 +61,7 @@ clickUpgradeBtn.onclick = () => {
     if (!gamePaused && numberOfCookies >= clickUpgradeCost) {
         numberOfCookies -= clickUpgradeCost;
         clickUpgradeCost += 10;
-        cookieIncreseNumber += cookieIncreseNumber; // Zvyšujeme hodnotu za kliknutí
+        cookieIncreseNumber += cookieIncreseNumber;
         counter.innerHTML = numberOfCookies;
         clickUpgradeBtn.innerHTML = "Click upgrade (Cost: " + clickUpgradeCost + ")";
         updateButtons();
@@ -84,7 +84,7 @@ autoclickUpgrade.onclick = () => {
 };
 
 const startAutoclick = () => {
-    if (autoclickInterval) clearInterval(autoclickInterval); // Zastavíme předchozí interval
+    if (autoclickInterval) clearInterval(autoclickInterval);
     autoclickInterval = setInterval(() => {
         if (!gamePaused) {
             numberOfCookies += cookieIncreseNumber;
